@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Rectangle example</title>
+</head>
+<body>
+<canvas id="DemoCanvas" width="500" height="600"></canvas> 
+<script>
+
+
+
+
+var canvas = document.getElementById("DemoCanvas");
+  var ctx = canvas.getContext('2d');
+
+  const wi =900;
+  const hi =600;
+
+    canvas.width = wi; 
+    canvas.height = hi;
+
+    ctx.fillStyle='#000';
+    ctx.fillRect(0, 0, wi,hi);
+
+draw(1,4);
+
+var x1,y1,out=0,score=0,x=0;
+
+function draw(x,y){
+    ctx.fillStyle='#000';
+    ctx.fillRect(0, 0, wi,hi);
+
+    ctx.fillStyle='white';
+    ctx.font = "20px Arial";
+    ctx.fillText("SCORE : "+(score+1),20,20);
+  
+  ctx.fillStyle='black';    // color of fill
+  ctx.fillRect(x, y, 50, 50); // create rectangle  
+  neww();
+}
+
+
+function neww(){
+  x1 = Math.floor((Math.random() * (wi-52)) + 1);
+  y1 = Math.floor((Math.random() * (hi-52)) + 1);
+  ctx.fillStyle='white';    // color of fill
+  ctx.fillRect(x1, y1, 50, 50); // create rectangle  
+  
+}
+
+
+
+
+canvas.addEventListener('click', (e) => {
+  const mousePos = {
+    x: e.clientX - canvas.offsetLeft,
+    y: e.clientY - canvas.offsetTop
+  };
+  
+  // get pixel under cursor
+  const pixel = ctx.getImageData(mousePos.x, mousePos.y, 1, 1).data;
+  // create rgb color for that pixel
+  const color = `rgb(${pixel[0]},${pixel[1]},${pixel[2]})`;
+  // console.log(color);
+
+
+    if (color=='rgb(255,255,255)') {      
+      console.log(color);
+            // alert('click on circle: '+circle.x);
+      draw(x1,y1);
+      score++;
+    }
+    else if(color=='rgb(0,0,0)'){
+      out=1;
+      console.log('out at '+score);
+
+    }
+
+if(out==1){
+  ctx.fillStyle='#999';
+  ctx.fillRect(0, 0, wi,hi);
+  
+  ctx.fillStyle='#000';
+  ctx.font = "25px Arial";
+    ctx.fillText("OUT", (wi/2)-80, hi/2);
+    ctx.fillText("SCORE : "+score, (wi/2)-80, (hi/2)+30);
+    ctx.fillText("NEW GAME STARTS IN 4s", (wi/2)-80, (hi/2)+60);
+
+  setTimeout(()=>{   
+    out=0;
+   ctx.fillStyle='#111';
+   ctx.fillRect(0, 0, wi,hi);
+   score=0;
+    draw(x1,y1);
+   }, 5000);
+    
+}
+
+
+  });
+
+</script>
+</body> 
+</html>
